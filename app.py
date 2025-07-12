@@ -1,13 +1,16 @@
-
 import streamlit as st
 import pickle
 import os
 
-# Load model
+# Correct path to model
 MODEL_PATH = os.path.join("model", "relief_model.pkl")
 
-@st.cache(allow_output_mutation=True)
+# Use new Streamlit caching method
+@st.cache_resource
 def load_model():
+    if not os.path.exists(MODEL_PATH):
+        st.error("❌ Model file not found. Make sure 'relief_model.pkl' exists inside the 'model/' folder.")
+        st.stop()
     with open(MODEL_PATH, "rb") as f:
         model = pickle.load(f)
     return model
